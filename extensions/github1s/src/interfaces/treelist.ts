@@ -1,15 +1,45 @@
+import _ajaxData from './1061';
+import { toUint8Array as decodeBase64, encode } from 'js-base64';
+const ajaxData = _ajaxData.data;
+
 export default {
-	sha: 'e0f833cc9a9668e0b5fe5a7e90a64a4b58a0a0a7',
-	tree: [
-		{
-			path: '.devcontainer',
-			type: 'tree',
-			sha: '1ccfa6ad98196acadfc1c1d732bf9cff09c35290',
-		},
-		{
-			path: '.devcontainer/Dockerfile',
-			type: 'blob',
-			sha: 'e49d9314d23b96641211d4a0dab828b0b1ad6814',
-		},
-	],
+	getGitHubAllFiles(obj) {
+		let keys = Object.keys(ajaxData);
+		let map = {};
+		let tree = [];
+		keys.forEach((key) => {
+			let l = key.replace(/\.vm$/, '').split('/');
+			let max = l.length - 1;
+			l.forEach((p, i) => {
+				let path = l.slice(0, i + 1).join('/');
+				if (!map[path]) {
+					tree.push({
+						path,
+						type: i === max ? 'blob' : 'tree',
+						sha: key,
+					});
+					map[path] = 1;
+				}
+			});
+		});
+		console.log(tree);
+		return Promise.resolve({
+			tree,
+		});
+	},
+	readGitHubFile(obj) {
+		// return Promise.resolve({
+		// 	sha: obj.fileSha,
+		// 	content:
+		// 		'cGFja2FnZSBjb20uc2l0ZS5zcHJpbmdib290LmNvcmUuY29uZmlnOwoKLyoq\nCiAqIEBhdXRob3IgMTMKICogQHFx5Lqk5rWB576kIDc5Njc5NDAwOQogKiBA\nZW1haWwgMjQ0OTIwNzQ2M0BxcS5jb20KICogQGxpbmsgaHR0cDovLzEzYmxv\nZy5zaXRlCiAqLwpwdWJsaWMgY2xhc3MgQ29uc3RhbnRzIHsKCiAgICBwdWJs\naWMgZmluYWwgc3RhdGljIFN0cmluZyBGSUxFX1VQTE9BRF9QQVRIID0gIi9o\nb21lL3Byb2plY3QvdXBsb2FkLyI7Ly/kuIrkvKDmlofku7bnmoTkv53lrZjl\nnLDlnYDvvIzmoLnmja7pg6jnvbLorr7nva7oh6rooYzkv67mlLkKCn0K\n',
+		// 	encoding: 'base64',
+		// });
+
+		let { fileSha } = obj;
+		return Promise.resolve({
+			sha: fileSha,
+			content: encode(ajaxData[fileSha]),
+			encoding: 'base64',
+		});
+	},
 };

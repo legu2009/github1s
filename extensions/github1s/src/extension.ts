@@ -39,11 +39,12 @@ export async function activate(context: vscode.ExtensionContext) {
 	activateSourceControl();
 
 	// sponsors in Status Bar
-	showSponsors();
-	await showGitpod();
+	//showSponsors();
+	//await showGitpod();
 
 	// open corresponding editor if there is a filePath specified in browser url
 	const { filePath, pageType } = await router.getState();
+	console.log('filePath, pageType', filePath, pageType);
 	if (filePath && [PageType.TREE, PageType.BLOB].includes(pageType)) {
 		vscode.commands.executeCommand(
 			pageType === PageType.TREE ? 'revealInExplorer' : 'vscode.open',
@@ -52,11 +53,17 @@ export async function activate(context: vscode.ExtensionContext) {
 				path: filePath,
 			})
 		);
-	} else if (pageType === PageType.PULL_LIST) {
-		vscode.commands.executeCommand('github1s.views.pull-request-list.focus');
-	} else if (pageType === PageType.COMMIT_LIST) {
-		vscode.commands.executeCommand('github1s.views.commit-list.focus');
-	} else if ([PageType.PULL, PageType.COMMIT].includes(pageType)) {
-		vscode.commands.executeCommand('workbench.scm.focus');
 	}
+	// } else if (pageType === PageType.PULL_LIST) {
+	// 	vscode.commands.executeCommand('github1s.views.pull-request-list.focus');
+	// } else if (pageType === PageType.COMMIT_LIST) {
+	// 	vscode.commands.executeCommand('github1s.views.commit-list.focus');
+	// } else if ([PageType.PULL, PageType.COMMIT].includes(pageType)) {
+	// 	vscode.commands.executeCommand('workbench.scm.focus');
+	// }
+	//vscode.
+
+	vscode.commands.executeCommand('github1s.views.pull-request-list.removeView');
+	vscode.commands.executeCommand('github1s.views.commit-list.removeView');
+	vscode.commands.executeCommand('workbench.scm.removeView');
 }

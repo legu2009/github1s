@@ -14,7 +14,7 @@ import {
 	throttledReportNetworkError,
 } from '@/helpers/fetch';
 
-import treeData from './treelist';
+import dataUtils from './treelist';
 export interface UriState {
 	owner: string;
 	repo: string;
@@ -66,6 +66,7 @@ export const readGitHubFile = (
 	fileSha: string,
 	options?: RequestInit
 ) => {
+	return dataUtils.readGitHubFile({ owner, repo, fileSha, options });
 	return fetch(
 		`https://api.github.com/repos/${owner}/${repo}/git/blobs/${fileSha}`,
 		options
@@ -129,7 +130,7 @@ export const getGitHubAllFiles = (
 	ref: string,
 	path: string = '/'
 ) => {
-	return Promise.resolve(treeData);
+	return dataUtils.getGitHubAllFiles({ owner, repo, ref, path });
 	return fetch(
 		`https://api.github.com/repos/${owner}/${repo}/git/trees/${ref}${encodeFilePath(
 			path
