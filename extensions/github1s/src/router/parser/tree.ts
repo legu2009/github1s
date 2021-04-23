@@ -37,7 +37,7 @@ const detectRefFormPathParts = async (pathParts: string[]): Promise<string> => {
 
 export const parseTreeUrl = async (path: string): Promise<RouterState> => {
 	const pathParts = parsePath(path).pathname.split('/').filter(Boolean);
-	const [owner = 'gaia1', repo = 'spm2'] = pathParts;
+	const [owner = 'gaia', repo = 'java'] = pathParts;
 	const ref = await detectRefFormPathParts(pathParts);
 	const filePath = pathParts.slice(3).join('/').slice(ref.length);
 
