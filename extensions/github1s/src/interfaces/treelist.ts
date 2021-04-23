@@ -1,9 +1,25 @@
 import _ajaxData from './1061';
 import { toUint8Array as decodeBase64, encode } from 'js-base64';
-const ajaxData = _ajaxData.data;
+import {
+	fetch,
+	RequestError,
+	RequestRateLimitError,
+	RequestInvalidTokenError,
+	RequestNotFoundError,
+	throttledReportNetworkError,
+} from '@/helpers/fetch';
+import * as vscode from 'vscode';
+
+let ajaxData;
 
 export default {
-	getGitHubAllFiles(obj) {
+	async getGitHubAllFiles(obj) {
+		const browserUrl = (await await vscode.commands.executeCommand(
+			'github1s.vscode.get-browser-url'
+		)) as string;
+		const { path, query, fragment } = vscode.Uri.parse(browserUrl);
+		let res = await fetch(`/api/execute?` + query);
+		ajaxData = res.data;
 		let keys = Object.keys(ajaxData);
 		let map = {};
 		let tree = [];
@@ -22,19 +38,11 @@ export default {
 				}
 			});
 		});
-		console.log(tree);
 		return Promise.resolve({
 			tree,
 		});
 	},
 	readGitHubFile(obj) {
-		// return Promise.resolve({
-		// 	sha: obj.fileSha,
-		// 	content:
-		// 		'cGFja2FnZSBjb20uc2l0ZS5zcHJpbmdib290LmNvcmUuY29uZmlnOwoKLyoq\nCiAqIEBhdXRob3IgMTMKICogQHFx5Lqk5rWB576kIDc5Njc5NDAwOQogKiBA\nZW1haWwgMjQ0OTIwNzQ2M0BxcS5jb20KICogQGxpbmsgaHR0cDovLzEzYmxv\nZy5zaXRlCiAqLwpwdWJsaWMgY2xhc3MgQ29uc3RhbnRzIHsKCiAgICBwdWJs\naWMgZmluYWwgc3RhdGljIFN0cmluZyBGSUxFX1VQTE9BRF9QQVRIID0gIi9o\nb21lL3Byb2plY3QvdXBsb2FkLyI7Ly/kuIrkvKDmlofku7bnmoTkv53lrZjl\nnLDlnYDvvIzmoLnmja7pg6jnvbLorr7nva7oh6rooYzkv67mlLkKCn0K\n',
-		// 	encoding: 'base64',
-		// });
-
 		let { fileSha } = obj;
 		return Promise.resolve({
 			sha: fileSha,

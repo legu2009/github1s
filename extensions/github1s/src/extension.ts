@@ -15,11 +15,12 @@ import router from '@/router';
 import { activateSourceControl } from '@/source-control';
 import { registerEventListeners } from '@/listeners';
 import { PageType } from './router/types';
-
 export async function activate(context: vscode.ExtensionContext) {
 	const browserUrl = (await await vscode.commands.executeCommand(
 		'github1s.vscode.get-browser-url'
 	)) as string;
+
+	console.log(browserUrl);
 
 	// set the global context for convenient
 	setExtensionContext(context);
@@ -62,8 +63,4 @@ export async function activate(context: vscode.ExtensionContext) {
 	// 	vscode.commands.executeCommand('workbench.scm.focus');
 	// }
 	//vscode.
-
-	vscode.commands.executeCommand('github1s.views.pull-request-list.removeView');
-	vscode.commands.executeCommand('github1s.views.commit-list.removeView');
-	vscode.commands.executeCommand('workbench.scm.removeView');
 }

@@ -4,7 +4,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "out",
-    "lib": ["es2016", "WebWorker"],
+    "lib": ["es2016", "WebWorker", "DOM"],
     "sourceMap": true,
     "baseUrl": "src",
     "paths": {
