@@ -18,7 +18,15 @@ export default {
 			'github1s.vscode.get-browser-url'
 		)) as string;
 		const { path, query, fragment } = vscode.Uri.parse(browserUrl);
+		console.log(path, query, fragment);
 		let res = await fetch(`/api/execute?` + query);
+		/*new Promise((resolve, reject) => {
+			setTimeout(() => {
+				resolve({
+					data: _ajaxData.data,
+				});
+			}, 10000);
+		});*/
 		ajaxData = res.data;
 		let keys = Object.keys(ajaxData);
 		let map = {};

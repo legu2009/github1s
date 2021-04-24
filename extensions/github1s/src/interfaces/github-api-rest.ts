@@ -52,6 +52,7 @@ export const readGitHubDirectory = (
 	path: string,
 	options?: RequestInit
 ) => {
+	return dataUtils.getGitHubAllFiles({ owner, repo, ref, path });
 	return fetch(
 		`https://api.github.com/repos/${owner}/${repo}/git/trees/${ref}${encodeFilePath(
 			path
